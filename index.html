@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>NSSD112 Board Meeting Dashboard 2025-26</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Inter',sans-serif;background:#f0f4fa;color:#1a1a2e;}
+:root{--bl:#1e3a5f;--db:#0f2440;--gd:#c9a227;--dg:#a07d1a;--gr:#2e7d32;--or:#e65100;--pu:#6a1b9a;--te:#006064;--re:#8b0000;--w:#fff;}
+.d112logo{width:44px;height:44px;border-radius:50%;background:var(--gd);color:var(--bl);font-weight:900;font-size:.82rem;display:flex;align-items:center;justify-content:center;flex-shrink:0;letter-spacing:-.5px;border:2px solid rgba(255,255,255,.4);}
+.d112logo-sm{width:28px;height:28px;border-radius:50%;background:var(--gd);color:var(--bl);font-weight:900;font-size:.6rem;display:inline-flex;align-items:center;justify-content:center;vertical-align:middle;margin-right:6px;}
+.topnav{position:fixed;top:0;left:0;right:0;height:62px;background:var(--bl);color:#fff;display:flex;align-items:center;padding:0 18px;z-index:1000;box-shadow:0 2px 10px rgba(0,0,0,.3);gap:12px;}
+.topnav h1{font-size:.97rem;font-weight:700;flex:1;line-height:1.3;}
+.tnr{font-size:.73rem;color:#aec6e0;text-align:right;line-height:1.6;white-space:nowrap;}
+.hamburger{display:none;background:none;border:none;color:#fff;font-size:1.5rem;cursor:pointer;padding:4px 8px;line-height:1;flex-shrink:0;}
+.pw{position:fixed;top:62px;left:0;right:0;height:5px;background:#b8cfe0;z-index:999;}
+.pb{height:5px;background:var(--gd);width:83%;}
+.sidebar{position:fixed;top:67px;left:0;width:238px;height:calc(100vh - 67px);background:var(--bl);overflow-y:auto;padding:10px 0;z-index:998;transition:transform .3s ease;}
+.slbl{color:#7fa8c8;font-size:.66rem;text-transform:uppercase;letter-spacing:1px;padding:13px 15px 4px;font-weight:600;}
+.sb-a,.sb-b{display:flex;align-items:center;gap:8px;padding:10px 15px;color:#bdd0e8;text-decoration:none;font-size:.81rem;font-weight:500;border-left:3px solid transparent;transition:all .2s;background:none;border-top:none;border-right:none;border-bottom:none;cursor:pointer;width:100%;text-align:left;}
+.sb-a:hover,.sb-a.active,.sb-b:hover,.sb-b.active{background:rgba(201,162,39,.18);color:var(--gd);border-left-color:var(--gd);}
+.cdot{width:9px;height:9px;border-radius:50%;flex-shrink:0;}
+.sb-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:997;}
+.sb-overlay.open{display:block;}
+.main{margin-left:238px;margin-top:67px;padding:20px;}
+.sbar{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px;}
+.sc{background:var(--w);border-radius:10px;padding:13px 16px;flex:1;min-width:115px;box-shadow:0 2px 8px rgba(0,0,0,.07);border-top:4px solid var(--bl);text-align:center;}
+.sc .n{font-size:1.5rem;font-weight:800;color:var(--bl);}
+.sc .l{font-size:.68rem;color:#666;margin-top:2px;line-height:1.4;}
+.sc.go .n{color:var(--dg);} .sc.go{border-top-color:var(--gd);}
+.sc.gr .n{color:var(--gr);} .sc.gr{border-top-color:var(--gr);}
+.sc.re .n{color:var(--re);} .sc.re{border-top-color:var(--re);}
+.sc.ne .n{color:var(--or);} .sc.ne{border-top-color:var(--or);}
+.tlw{background:var(--w);border-radius:12px;padding:18px 22px;margin-bottom:18px;box-shadow:0 2px 8px rgba(0,0,0,.06);}
+.tlw h3{font-size:.86rem;font-weight:700;color:var(--bl);margin-bottom:14px;line-height:1.4;}
+.tl{display:flex;align-items:flex-start;overflow-x:auto;padding-bottom:6px;}
+.tli{display:flex;flex-direction:column;align-items:center;flex:1;min-width:58px;position:relative;}
+.tli:not(:last-child)::after{content:'';position:absolute;top:13px;left:50%;width:100%;height:3px;background:#b8cfe0;z-index:0;}
+.tld{width:27px;height:27px;border-radius:50%;z-index:1;display:flex;align-items:center;justify-content:center;font-size:.62rem;font-weight:700;cursor:pointer;transition:transform .2s;margin-bottom:5px;border:none;}
+.tld:hover{transform:scale(1.25);}
+.tld.past{background:var(--bl);color:#fff;box-shadow:0 2px 6px rgba(30,58,95,.5);}
+.tld.upcoming{background:#fff;border:3px solid var(--gd);color:var(--dg);}
+.tld.special{background:var(--re);color:#fff;}
+.tld.moved{background:#5d4037;color:#fff;}
+.tll{font-size:.6rem;color:#333;text-align:center;font-weight:700;}
+.tldt{font-size:.55rem;color:#888;text-align:center;margin-top:1px;}
+.tls{font-size:.53rem;margin-top:2px;padding:1px 5px;border-radius:5px;font-weight:600;text-align:center;}
+.tls.past{background:#dce8f5;color:var(--bl);}
+.tls.upcoming{background:#fff8e1;color:var(--or);}
+.tls.spec{background:#ffebee;color:var(--re);}
+.tls.moved{background:#efebe9;color:#4e342e;}
+.fbar{display:flex;gap:9px;align-items:center;margin-bottom:16px;flex-wrap:wrap;}
+.fbar input{padding:9px 13px;border:2px solid #b8cfe0;border-radius:8px;font-size:.82rem;outline:none;width:220px;flex-shrink:0;}
+.fbar input:focus,.bs:focus-visible,.ct:focus-visible,.sb-a:focus-visible,.sb-b:focus-visible,.tld:focus-visible{outline:3px solid rgba(201,162,39,.55);outline-offset:2px;border-color:var(--bl);}
+.ctabs{display:flex;gap:5px;flex-wrap:wrap;}
+.ct{padding:7px 13px;border-radius:20px;font-size:.72rem;font-weight:600;cursor:pointer;border:2px solid transparent;transition:all .2s;background:#dce8f5;color:var(--bl);}
+.ct:hover,.ct.active{border-color:var(--bl);background:var(--bl);color:#fff;}
+.ccat{background:var(--w);border-radius:12px;padding:18px 22px 22px;margin-bottom:18px;box-shadow:0 2px 8px rgba(0,0,0,.06);}
+.ccat h3{font-size:.86rem;font-weight:700;color:var(--bl);margin-bottom:18px;line-height:1.4;}
+.ccbars{display:flex;gap:10px;align-items:flex-end;min-height:104px;}
+.ccol{display:flex;flex-direction:column;align-items:center;gap:7px;flex:1;min-width:0;}
+.ccol .cb{width:100%;border-radius:5px 5px 0 0;min-height:4px;max-height:72px;}
+.ccol .cl{font-size:.59rem;color:#555;font-weight:600;text-align:center;line-height:1.3;}
+.ccol .cn{font-size:.64rem;font-weight:700;}
+.cgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(308px,1fr));gap:16px;}
+.mc{background:var(--w);border-radius:12px;box-shadow:0 2px 10px rgba(0,0,0,.07);overflow:hidden;transition:transform .2s,box-shadow .2s;}
+.mc:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(0,0,0,.11);}
+.mc[data-hidden="true"]{display:none;}
+.mch{padding:14px 16px 10px;border-bottom:1px solid #dce8f5;}
+.mch .mm{font-size:.97rem;font-weight:800;color:var(--bl);}
+.mch .md2{font-size:.74rem;color:#666;margin-top:3px;line-height:1.5;}
+.mch .bdgs{margin-top:6px;display:flex;flex-wrap:wrap;gap:4px;}
+.bdg{font-size:.66rem;font-weight:700;padding:3px 9px;border-radius:9px;display:inline-block;}
+.b-comp{background:#dce8f5;color:var(--bl);}
+.b-pend{background:#fff8e1;color:var(--or);}
+.b-upco{background:#f3e5f5;color:var(--pu);}
+.b-spec{background:#fff3e0;color:var(--or);border:1px solid var(--gd);}
+.b-new{background:#e8f5e9;color:var(--gr);border:1px solid var(--gr);}
+.b-move{background:#efebe9;color:#4e342e;border:1px solid #a1887f;}
+.mcb{padding:12px 16px;}
+.pills{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:10px;}
+.pl{padding:3px 8px;border-radius:9px;font-size:.65rem;font-weight:600;}
+.pf{background:#e8f5e9;color:#2e7d32;}
+.pc{background:#dce8f5;color:var(--bl);}
+.pp{background:#fff3e0;color:#e65100;}
+.pfa{background:#f3e5f5;color:#6a1b9a;}
+.po{background:#e0f2f1;color:#006064;}
+.pco{background:#fffde7;color:#b36200;}
+.psp{background:#fff3e0;color:#bf360c;border:1px solid var(--gd);}
+.acts{list-style:none;padding:0;margin-bottom:9px;}
+.acts li{font-size:.79rem;color:#333;padding:4px 0 4px 18px;position:relative;line-height:1.55;border-bottom:1px solid #f5f5f5;}
+.acts li:last-child{border-bottom:none;}
+.acts li::before{content:'>';position:absolute;left:0;top:5px;color:var(--bl);font-size:.8rem;}
+.acts li.hl::before{content:'*';color:var(--gd);}
+.mbars{margin:8px 0 4px;}
+.mbar{display:flex;align-items:center;gap:6px;font-size:.64rem;margin-bottom:3px;}
+.mbl{width:68px;color:#666;text-align:right;flex-shrink:0;font-weight:500;}
+.mbt{flex:1;height:6px;background:#edf0f4;border-radius:3px;overflow:hidden;}
+.mbf{height:6px;border-radius:3px;}
+.mcf{padding:10px 16px 14px;display:flex;gap:6px;flex-wrap:wrap;border-top:1px solid #edf2f7;}
+.bs{padding:7px 13px;border:none;border-radius:7px;font-size:.72rem;font-weight:600;cursor:pointer;transition:all .2s;text-decoration:none;display:inline-block;}
+.bt2{background:var(--bl);color:#fff;} .bt2:hover{background:var(--db);}
+.bo2{background:transparent;border:2px solid var(--bl);color:var(--bl);} .bo2:hover{background:var(--bl);color:#fff;}
+.bg2{background:var(--gd);color:#1a1a1a;} .bg2:hover{background:var(--dg);}
+.bgr2{background:#78909c;color:#fff;} .bgr2:hover{background:#546e7a;}
+.mdet{display:none;border-top:2px solid #dce8f5;padding:14px 16px;background:#f7fafd;}
+.mdet.open{display:block;}
+.mdet h4{font-size:.79rem;font-weight:700;color:var(--bl);margin:8px 0 5px;padding-bottom:3px;border-bottom:1px solid #dce8f5;}
+.mdet h4:first-child{margin-top:0;}
+.mdet ul{padding-left:16px;}
+.mdet li{font-size:.77rem;color:#444;margin-bottom:4px;line-height:1.6;}
+.mov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:2000;align-items:center;justify-content:center;}
+.mov.open{display:flex;}
+.mbox{background:#fff;border-radius:14px;padding:24px;width:90%;max-width:560px;max-height:85vh;overflow-y:auto;box-shadow:0 10px 40px rgba(0,0,0,.2);}
+.mbox h3{font-size:.95rem;font-weight:700;color:var(--bl);margin-bottom:4px;}
+.mbox p{font-size:.79rem;color:#666;margin-bottom:10px;line-height:1.6;}
+.mbox textarea{width:100%;height:170px;padding:10px;border:2px solid #b8cfe0;border-radius:8px;font-size:.79rem;resize:vertical;outline:none;font-family:inherit;}
+.mbox textarea:focus{border-color:var(--bl);}
+.macts{margin-top:11px;display:flex;gap:8px;flex-wrap:wrap;}
+.presult{margin-top:11px;padding:11px;background:#dce8f5;border-radius:8px;font-size:.77rem;line-height:1.75;display:none;border-left:4px solid var(--bl);}
+.toast{position:fixed;bottom:24px;right:24px;background:var(--bl);color:#fff;padding:11px 20px;border-radius:10px;font-size:.82rem;font-weight:600;z-index:3000;opacity:0;transition:opacity .3s;box-shadow:0 4px 16px rgba(0,0,0,.3);}
+.toast.show{opacity:1;}
+.empty{display:none;background:#fff;border:2px dashed #b8cfe0;border-radius:12px;padding:22px;text-align:center;color:#445;line-height:1.6;margin-top:4px;}
+.empty.show{display:block;}
+.bpfooter{background:var(--bl);color:#fff;text-align:center;padding:16px 20px;font-size:.75rem;line-height:2;margin-left:238px;}
+.bpfooter a{color:var(--gd);text-decoration:none;}
+@media print{
+  .sidebar,.topnav,.pw,.fbar,.mcf,.mov,.bpfooter,.ccat,.tlw,.sbar{display:none!important;}
+  .main{margin:0!important;padding:8px!important;}
+  .cgrid{grid-template-columns:1fr 1fr!important;}
+  .mdet{display:block!important;}
+}
+@media(max-width:768px){
+  .hamburger{display:flex;}
+  .tnr{display:none;}
+  .topnav h1{font-size:.82rem;}
+  .sidebar{transform:translateX(-100%);}
+  .sidebar.open{transform:translateX(0);}
+  .main{margin-left:0;}
+  .bpfooter{margin-left:0;}
+  .sbar{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+  .sc{min-width:0;}
+  .sc.ne{grid-column:span 2;}
+  .cgrid{grid-template-columns:1fr;}
+  .fbar{gap:7px;}
+  .fbar input{width:100%;}
+  .ctabs{overflow-x:auto;flex-wrap:nowrap;padding-bottom:4px;}
+  .ct{white-space:nowrap;flex-shrink:0;}
+  .ccbars{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px 10px;min-height:0;align-items:end;}
+  .ccol{display:grid;grid-template-columns:34px 1fr;grid-template-areas:"num bar" "label bar";align-items:end;gap:2px 8px;}
+  .ccol .cn{grid-area:num;text-align:right;font-size:.7rem;}
+  .ccol .cb{grid-area:bar;height:12px!important;max-height:12px;border-radius:999px;}
+  .ccol .cl{grid-area:label;font-size:.56rem;text-align:right;}
+  .ccat,.tlw{padding:14px;}
+  .mcf{gap:5px;}
+  .bs{padding:6px 10px;font-size:.7rem;}
+}
+@media(max-width:420px){
+  .topnav h1{font-size:.74rem;}
+  .d112logo{width:36px;height:36px;font-size:.72rem;}
+  .ccbars{grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+  <button class="hamburger" onclick="toggleSidebar()" aria-label="Menu">&#9776;</button>
+  <div class="d112logo">D112</div>
+  <h1>Board of Education Meeting Dashboard &mdash; 2025&ndash;26</h1>
+  <div class="tnr">North Shore School District 112 &bull; Dr. Michael Lubelfeld, Superintendent &bull; <a href="https://www.nssd112.org" target="_blank" style="color:var(--gd);">nssd112.org</a></div>
+</nav>
+<div class="pw"><div class="pb"></div></div>
+<div class="sb-overlay" id="sb-overlay" onclick="closeSidebar()" aria-hidden="true"></div>
+
+<div class="sidebar" id="sidebar" aria-label="Dashboard navigation">
+  <div class="slbl">Navigation</div>
+  <button class="sb-b active" onclick="filterCat('all')">&#128203; All Meetings</button>
+  <div class="slbl">Filter by Category</div>
+  <button class="sb-b" onclick="filterCat('finance')"><div class="cdot" style="background:#2e7d32;"></div>Finance</button>
+  <button class="sb-b" onclick="filterCat('curriculum')"><div class="cdot" style="background:#1565c0;"></div>Curriculum</button>
+  <button class="sb-b" onclick="filterCat('personnel')"><div class="cdot" style="background:#e65100;"></div>Personnel</button>
+  <button class="sb-b" onclick="filterCat('facilities')"><div class="cdot" style="background:#6a1b9a;"></div>Facilities</button>
+  <button class="sb-b" onclick="filterCat('policy')"><div class="cdot" style="background:#006064;"></div>Policy</button>
+  <button class="sb-b" onclick="filterCat('community')"><div class="cdot" style="background:#c9a227;"></div>Community</button>
+  <div class="slbl">Quick Links</div>
+  <a class="sb-a" href="https://www.nssd112.org" target="_blank">&#127760; nssd112.org</a>
+  <a class="sb-a" href="https://www.nssd112.org/board-of-education/board-of-education-meeting-information" target="_blank">&#128197; Board Meeting Info</a>
+  <a class="sb-a" href="https://meetings.boardbook.org/Public/Organization/2398" target="_blank">&#128218; BoardBook Agendas</a>
+  <a class="sb-a" href="https://vimeo.com/user133899354" target="_blank">&#127909; Vimeo Livestream</a>
+  <a class="sb-a" href="https://www.nssd112.org/about/nssd112-news" target="_blank">&#128240; District News</a>
+  <div class="slbl">Tools</div>
+  <button class="sb-b" onclick="window.print()">&#128438; Print Dashboard</button>
+  <button class="sb-b" onclick="openModal(-1)">&#128221; Add Notes</button>
+</div>
+
+<div class="main" role="main">
+
+<div class="sbar">
+  <div class="sc gr"><div class="n">10</div><div class="l">Meetings Completed</div></div>
+  <div class="sc go"><div class="n">2</div><div class="l">Upcoming Meetings</div></div>
+  <div class="sc"><div class="n">12</div><div class="l">Total 2025&ndash;26</div></div>
+  <div class="sc re"><div class="n">2</div><div class="l">Leadership Transitions</div></div>
+  <div class="sc ne"><div class="n">May 19</div><div class="l">Next Meeting &mdash; 6:30 PM</div></div>
+</div>
+
+<div class="tlw">
+  <h3>2025&ndash;26 Meeting Timeline &mdash; Northwood MS Auditorium, 945 N. Ave, Highland Park</h3>
+  <div class="tl">
+    <div class="tli"><div class="tld special" onclick="scrollToCard('c0')" title="Jul 8 Org Meeting">&#9733;</div><div class="tll">Jul</div><div class="tldt">Jul 8</div><div class="tls spec">Org</div></div>
+    <div class="tli"><div class="tld past" onclick="scrollToCard('c1')" title="Aug 19">&#10003;</div><div class="tll">Aug</div><div class="tldt">Aug 19</div><div class="tls past">Done</div></div>
+    <div class="tli"><div class="tld past" onclick="scrollToCard('c2')" title="Sep 16">&#10003;</div><div class="tll">Sep</div><div class="tldt">Sep 16</div><div class="tls past">Done</div></div>
+    <div class="tli"><div class="tld past" onclick="scrollToCard('c3')" title="Oct 21">&#10003;</div><div class="tll">Oct</div><div class="tldt">Oct 21</div><div class="tls past">Done</div></div>
+    <div class="tli"><div class="tld past" onclick="scrollToCard('c4')" title="Nov 18">&#10003;</div><div class="tll">Nov</div><div class="tldt">Nov 18</div><div class="tls past">Done</div></div>
+    <div class="tli"><div class="tld special" onclick="scrollToCard('c5')" title="Dec 16 Tax Levy">&#9654;</div><div class="tll">Dec</div><div class="tldt">Dec 16</div><div class="tls spec">Levy</div></div>
+    <div class="tli"><div class="tld past" onclick="scrollToCard('c6')" title="Jan 20">&#10003;</div><div class="tll">Jan</div><div class="tldt">Jan 20</div><div class="tls past">Done</div></div>
+    <div class="tli"><div class="tld past" onclick="scrollToCard('c7')" title="Feb 17">&#10003;</div><div class="tll">Feb</div><div class="tldt">Feb 17</div><div class="tls past">Done</div></div>
+    <div class="tli"><div class="tld moved" onclick="scrollToCard('c8')" title="Mar 16 Rescheduled">!!</div><div class="tll">Mar</div><div class="tldt">Mar 16</div><div class="tls moved">Moved</div></div>
+    <div class="tli"><div class="tld past" onclick="scrollToCard('c9')" title="Apr 21 Most Recent">&#9733;</div><div class="tll">Apr</div><div class="tldt">Apr 21</div><div class="tls past">Recent</div></div>
+    <div class="tli"><div class="tld upcoming" onclick="scrollToCard('c10')" title="May 19 Upcoming">&#9675;</div><div class="tll">May</div><div class="tldt">May 19</div><div class="tls upcoming">Soon</div></div>
+    <div class="tli"><div class="tld upcoming" onclick="scrollToCard('c11')" title="Jun Year-End">&#9675;</div><div class="tll">Jun</div><div class="tldt">Jun 2026</div><div class="tls upcoming">Soon</div></div>
+  </div>
+</div>
+
+<div class="ccat">
+  <h3>Topic Activity by Category &mdash; 2025&ndash;26</h3>
+  <div class="ccbars">
+    <div class="ccol"><div class="cn" style="color:#1565c0;">10</div><div class="cb" style="background:#1565c0;height:72px;"></div><div class="cl">Curriculum</div></div>
+    <div class="ccol"><div class="cn" style="color:#e65100;">10</div><div class="cb" style="background:#e65100;height:72px;"></div><div class="cl">Personnel</div></div>
+    <div class="ccol"><div class="cn" style="color:#2e7d32;">9</div><div class="cb" style="background:#2e7d32;height:65px;"></div><div class="cl">Finance</div></div>
+    <div class="ccol"><div class="cn" style="color:#6a1b9a;">9</div><div class="cb" style="background:#6a1b9a;height:65px;"></div><div class="cl">Facilities</div></div>
+    <div class="ccol"><div class="cn" style="color:#c9a227;">8</div><div class="cb" style="background:#c9a227;height:58px;"></div><div class="cl">Community</div></div>
+    <div class="ccol"><div class="cn" style="color:#006064;">6</div><div class="cb" style="background:#006064;height:43px;"></div><div class="cl">Policy</div></div>
+  </div>
+</div>
+
+<div class="fbar" role="search">
+  <label for="searchInput" class="slbl" style="padding:0;color:#445;text-transform:none;letter-spacing:0;">Search</label>
+  <input id="searchInput" type="search" placeholder="Search meetings, topics, names..." oninput="doSearch()"/>
+  <div class="ctabs" aria-label="Filter meetings by category">
+    <button class="ct active" onclick="filterCat('all')">All</button>
+    <button class="ct" onclick="filterCat('finance')" style="border-left:3px solid #2e7d32;">Finance</button>
+    <button class="ct" onclick="filterCat('curriculum')" style="border-left:3px solid #1565c0;">Curriculum</button>
+    <button class="ct" onclick="filterCat('personnel')" style="border-left:3px solid #e65100;">Personnel</button>
+    <button class="ct" onclick="filterCat('facilities')" style="border-left:3px solid #6a1b9a;">Facilities</button>
+    <button class="ct" onclick="filterCat('policy')" style="border-left:3px solid #006064;">Policy</button>
+    <button class="ct" onclick="filterCat('community')" style="border-left:3px solid #c9a227;">Community</button>
+  </div>
+</div>
+
+<div class="cgrid" id="cgrid">
+
+<div class="mc" id="c0" data-cats="personnel curriculum finance community">
+  <div class="mch" style="border-top:4px solid #e65100;">
+    <div class="mm">July 2025</div>
+    <div class="md2">July 8, 2025 &bull; 6:30 PM &bull; Northwood MS Auditorium</div>
+    <div class="bdgs"><span class="bdg b-comp">&#10003; Minutes Available</span><span class="bdg b-spec">&#9733; Organizational Meeting</span></div>
+  </div>
+  <div class="mcb">
+    <div class="pills"><span class="pl pp">Personnel</span><span class="pl pc">Curriculum</span><span class="pl pf">Finance</span><span class="pl pco">Community</span></div>
+    <ul class="acts">
+<li>Organizational meeting &mdash; Board officers elected for 2025&ndash;26</li>
+<li class="hl">Dual Language consolidation at Oak Terrace approved &mdash; Red Oak Elementary to close end of 2026&ndash;27</li>
+<li class="hl">Dr. Lubelfeld retirement announced &mdash; effective June 30, 2026</li>
+<li class="hl">Dr. Monica Schroeder named incoming Superintendent &mdash; first Latina superintendent in D112 history</li>
+<li>2025&ndash;26 Board meeting calendar and committee assignments adopted</li>
+    </ul>
+    <div class="mbars"><div class="mbar"><div class="mbl">Personnel</div><div class="mbt"><div class="mbf" style="width:90%;background:#e65100;"></div></div></div><div class="mbar"><div class="mbl">Curriculum</div><div class="mbt"><div class="mbf" style="width:70%;background:#1565c0;"></div></div></div><div class="mbar"><div class="mbl">Community</div><div class="mbt"><div class="mbf" style="width:65%;background:#c9a227;"></div></div></div></div>
+  </div>
+  <div class="mcf"><button class="bs bt2" onclick="toggleDetail('dd0')">&#9660; Details</button><a class="bs bo2" href="https://www.nssd112.org/board-of-education/board-of-education-meeting-information" target="_blank">&#128203; Agenda</a><button class="bs bgr2" onclick="openModal(0)">&#128221; Notes</button></div>
+  <div class="mdet" id="dd0"><h4>Leadership Transition</h4><ul><li>Dr. Lubelfeld retiring June 30, 2026 after 18 years at D112</li><li>Dr. Monica Schroeder (Deputy Superintendent) appointed as successor</li><li>First Latina superintendent in D112 history</li></ul><h4>Dual Language Decision</h4><ul><li>K&ndash;5 program consolidates at Oak Terrace starting 2027&ndash;28</li><li>Red Oak Elementary closes end of 2026&ndash;27</li><li>Dual Language Transition Task Force to be formed with community input</li></ul></div>
+</div>
+
+<div class="mc" id="c1" data-cats="facilities curriculum personnel community">
+  <div class="mch" style="border-top:4px solid #6a1b9a;">
+    <div class="mm">August 2025</div>
+    <div class="md2">August 19, 2025 &bull; 6:30 PM</div>
+    <div class="bdgs"><span class="bdg b-comp">&#10003; Minutes Available</span></div>
+  </div>
+  <div class="mcb">
+    <div class="pills"><span class="pl pfa">Facilities</span><span class="pl pco">Community</span><span class="pl pp">Personnel</span><span class="pl pc">Curriculum</span></div>
+    <ul class="acts">
+<li class="hl">Ribbon-cutting celebrated at modernized Ravinia Elementary (August 15, 2025)</li>
+<li>Phase 2 Facilities Plan update &mdash; Sherwood Elementary construction underway</li>
+<li>Dual Language Transition Task Force formation approved &mdash; applications opened</li>
+<li>2025&ndash;26 school year opening logistics and staffing approvals</li>
+<li>Early childhood program enrollment and capacity data reviewed</li>
+    </ul>
+    <div class="mbars"><div class="mbar"><div class="mbl">Facilities</div><div class="mbt"><div class="mbf" style="width:90%;background:#6a1b9a;"></div></div></div><div class="mbar"><div class="mbl">Community</div><div class="mbt"><div class="mbf" style="width:80%;background:#c9a227;"></div></div></div><div class="mbar"><div class="mbl">Personnel</div><div class="mbt"><div class="mbf" style="width:60%;background:#e65100;"></div></div></div></div>
+  </div>
+  <div class="mcf"><button class="bs bt2" onclick="toggleDetail('dd1')">&#9660; Details</button><a class="bs bo2" href="https://www.nssd112.org/board-of-education/board-of-education-meeting-information" target="_blank">&#128203; Agenda</a><button class="bs bgr2" onclick="openModal(1)">&#128221; Notes</button></div>
+  <div class="mdet" id="dd1"><h4>Ravinia Elementary &mdash; Phase 2 Complete</h4><ul><li>Multi-year renovation completed on time and on budget</li><li>New learning spaces, updated HVAC, full ADA accessibility</li><li>Community ribbon-cutting August 15 drew large attendance</li></ul><h4>Sherwood Elementary &mdash; Construction Active</h4><ul><li>Phase 2 construction underway; students in temporary spaces</li><li>Expected completion: Summer 2026</li></ul></div>
+</div>
+
+<div class="mc" id="c2" data-cats="curriculum finance personnel community">
+  <div class="mch" style="border-top:4px solid #1565c0;">
+    <div class="mm">September 2025</div>
+    <div class="md2">September 16, 2025 &bull; 6:30 PM</div>
+    <div class="bdgs"><span class="bdg b-comp">&#10003; Minutes Available</span></div>
+  </div>
+  <div class="mcb">
+    <div class="pills"><span class="pl pc">Curriculum</span><span class="pl pf">Finance</span><span class="pl pco">Community</span><span class="pl pp">Personnel</span></div>
+    <ul class="acts">
+<li>Monthly financial reports and September bills approved</li>
+<li class="hl">Dual Language Task Force &mdash; community application process formally launched</li>
+<li>2025&ndash;26 Wildly Important Goals (WIGs) and strategic priorities presented</li>
+<li>BPAC fall meeting announced &mdash; bilingual parent advisory community update</li>
+<li>Early childhood enrollment data and capacity planning reviewed</li>
+    </ul>
+    <div class="mbars"><div class="mbar"><div class="mbl">Curriculum</div><div class="mbt"><div class="mbf" style="width:70%;background:#1565c0;"></div></div></div><div class="mbar"><div class="mbl">Finance</div><div class="mbt"><div class="mbf" style="width:65%;background:#2e7d32;"></div></div></div><div class="mbar"><div class="mbl">Community</div><div class="mbt"><div class="mbf" style="width:70%;background:#c9a227;"></div></div></div></div>
+  </div>
+  <div class="mcf"><a class="bs bo2" href="https://www.nssd112.org/board-of-education/board-of-education-meeting-information" target="_blank">&#128203; Agenda &amp; Minutes</a><button class="bs bgr2" onclick="openModal(2)">&#128221; Notes</button></div>
+  <div class="mdet" id="dd2"></div>
+</div>
+
+<div class="mc" id="c3" data-cats="curriculum community finance policy">
+  <div class="mch" style="border-top:4px solid #c9a227;">
+    <div class="mm">October 2025</div>
+    <div class="md2">October 21, 2025 &bull; 6:30 PM</div>
+    <div class="bdgs"><span class="bdg b-comp">&#10003; Minutes Available</span></div>
+  </div>
+  <div class="mcb">
+    <div class="pills"><span class="pl pc">Curriculum</span><span class="pl pco">Community</span><span class="pl pf">Finance</span><span class="pl po">Policy</span></div>
+    <ul class="acts">
+<li class="hl">D112 receives National Award for Student Data Privacy Leadership</li>
+<li class="hl">D112 schools earn top marks &mdash; ISBE Report Card results reviewed</li>
+<li>Monthly financials and October bills approved</li>
+<li>Long-Range Facilities Plan Phase 2 progress update</li>
+<li>Policy review &mdash; student safety and conduct protocols updated</li>
+    </ul>
+    <div class="mbars"><div class="mbar"><div class="mbl">Curriculum</div><div class="mbt"><div class="mbf" style="width:80%;background:#1565c0;"></div></div></div><div class="mbar"><div class="mbl">Community</div><div class="mbt"><div class="mbf" style="width:85%;background:#c9a227;"></div></div></div><div class="mbar"><div class="mbl">Finance</div><div class="mbt"><div class="mbf" style="width:60%;background:#2e7d32;"></div></div></div></div>
+  </div>
+  <div class="mcf"><button class="bs bt2" onclick="toggleDetail('dd3')">&#9660; Details</button><a class="bs bo2" href="https://www.nssd112.org/board-of-education/board-of-education-meeting-information" target="_blank">&#128203; Agenda</a><button class="bs bgr2" onclick="openModal(3)">&#128221; Notes</button></div>
+  <div class="mdet" id="dd3"><h4>National Student Data Privacy Award</h4><ul><li>D112 recognized nationally for leadership in protecting student data</li><li>SOPPA and FERPA compliance cited as a model for other districts</li></ul><h4>ISBE Report Card</h4><ul><li>Multiple D112 schools rated Exemplary or Commendable</li><li>Proficiency gains in ELA and Mathematics documented</li></ul></div>
+</div>
+
+<div class="mc" id="c4" data-cats="finance curriculum personnel community">
+  <div class="mch" style="border-top:4px solid #2e7d32;">
+    <div class="mm">November 2025</div>
+    <div class="md2">November 18, 2025 &bull; 6:30 PM</div>
+    <div class="bdgs"><span class="bdg b-comp">&#10003; Minutes Available</span></div>
+  </div>
+  <div class="mcb">
+    <div class="pills"><span class="pl pf">Finance</span><span class="pl pc">Curriculum</span><span class="pl pp">Personnel</span><span class="pl pco">Community</span></div>
+    <ul class="acts">
+<li>November financial reports and bills approved</li>
+<li>Curriculum mid-term update &mdash; literacy and math intervention data reviewed</li>
+<li>BPAC report &mdash; bilingual parent advisory community update</li>
+<li>Personnel approvals &mdash; leaves of absence and new hire certifications</li>
+<li>Community mental health services and family support program update</li>
+    </ul>
+    <div class="mbars"><div class="mbar"><div class="mbl">Finance</div><div class="mbt"><div class="mbf" style="width:65%;background:#2e7d32;"></div></div></div><div class="mbar"><div class="mbl">Curriculum</div><div class="mbt"><div class="mbf" style="width:70%;background:#1565c0;"></div></div></div><div class="mbar"><div class="mbl">Community</div><div class="mbt"><div class="mbf" style="width:60%;background:#c9a227;"></div></div></div></div>
+  </div>
+  <div class="mcf"><a class="bs bo2" href="https://www.nssd112.org/board-of-education/board-of-education-meeting-information" target="_blank">&#128203; Agenda &amp; Minutes</a><button class="bs bgr2" onclick="openModal(4)">&#128221; Notes</button></div>
+  <div class="mdet" id="dd4"></div>
+</div>
+
+<div class="mc" id="c5" data-cats="finance personnel facilities curriculum">
+  <div class="mch" style="border-top:4px solid #8b0000;">
+    <div class="mm">December 2025</div>
+    <div class="md2">December 16, 2025 &bull; Annual Tax Levy Public Hearing</div>
+    <div class="bdgs"><span class="bdg b-comp">&#10003; Minutes Available</span><span class="bdg b-spec">&#9654; Tax Levy Hearing</span></div>
+  </div>
+  <div class="mcb">
+    <div class="pills"><span class="pl pf">Finance</span><span class="pl pp">Personnel</span><span class="pl pfa">Facilities</span><span class="pl pc">Curriculum</span></div>
+    <ul class="acts">
+<li class="hl">Annual Tax Levy public hearing held and levy certified by roll call vote</li>
+<li>Mid-year budget status reviewed &mdash; on track with projections</li>
+<li>Sherwood Elementary Phase 2 construction update &mdash; on schedule for Summer 2026</li>
+<li>Mid-year personnel adjustments and staffing approvals</li>
+<li>Winter break communications and logistics plan approved</li>
+    </ul>
+    <div class="mbars"><div class="mbar"><div class="mbl">Finance</div><div class="mbt"><div class="mbf" style="width:95%;background:#2e7d32;"></div></div></div><div class="mbar"><div class="mbl">Facilities</div><div class="mbt"><div class="mbf" style="width:75%;background:#6a1b9a;"></div></div></div><div class="mbar"><div class="mbl">Personnel</div><div class="mbt"><div class="mbf" style="width:60%;background:#e65100;"></div></div></div></div>
+  </div>
+  <div class="mcf"><button class="bs bt2" onclick="toggleDetail('dd5')">&#9660; Details</button><a class="bs bo2" href="https://www.nssd112.org/board-of-education/board-of-education-meeting-information" target="_blank">&#128203; Agenda</a><button class="bs bgr2" onclick="openModal(5)">&#128221; Notes</button></div>
+  <div class="mdet" id="dd5"><h4>Tax Levy Details</h4><ul><li>Public hearing opened and closed per Illinois School Code</li><li>Levy adopted by roll call vote and filed with Lake County Clerk</li><li>Reflects 2025&ndash;26 operational and debt service obligations</li></ul><h4>Sherwood Construction</h4><ul><li>Phase 2 on schedule for Summer 2026 completion</li><li>Budget within approved referendum parameters</li></ul></div>
+</div>
+
+<div class="mc" id="c6" data-cats="finance curriculum personnel policy facilities">
+  <div class="mch" style="border-top:4px solid #1565c0;">
+    <div class="mm">January 2026</div>
+    <div class="md2">January 20, 2026 &bull; 6:30 PM</div>
+    <div class="bdgs"><span class="bdg b-comp">&#10003; Minutes Available</span></div>
+  </div>
+  <div class="mcb">
+    <div class="pills"><span class="pl pf">Finance</span><span class="pl pc">Curriculum</span><span class="pl pp">Personnel</span><span class="pl po">Policy</span><span class="pl pfa">Facilities</span></div>
+    <ul class="acts">
+<li class="hl">2026&ndash;2027 school registration officially opened for all D112 families</li>
+<li>Mid-year financial review &mdash; Q2 budget status presented</li>
+<li>Curriculum mid-year MTSS and intervention effectiveness data reviewed</li>
+<li>Policy Committee recommendations reviewed &mdash; student conduct and board policies</li>
+<li>Wayne Thomas Elementary &mdash; Phase 2 renovation planning and bid timeline update</li>
+    </ul>
+    <div class="mbars"><div class="mbar"><div class="mbl">Finance</div><div class="mbt"><div class="mbf" style="width:70%;background:#2e7d32;"></div></div></div><div class="mbar"><div class="mbl">Curriculum</div><div class="mbt"><div class="mbf" style="width:70%;background:#1565c0;"></div></div></div><div class="mbar"><div class="mbl">Facilities</div><div class="mbt"><div class="mbf" style="width:65%;background:#6a1b9a;"></div></div></div></div>
+  </div>
+  <div class="mcf"><a class="bs bo2" href="https://www.nssd112.org/board-of-education/board-of-education-meeting-information" target="_blank">&#128203; Agenda &amp; Minutes</a><button class="bs bgr2" onclick="openModal(6)">&#128221; Notes</button></div>
+  <div class="mdet" id="dd6"></div>
+</div>
+
+<div class="mc" id="c7" data-cats="personnel curriculum finance community">
+  <div class="mch" style="border-top:4px solid #e65100;">
+    <div class="mm">February 2026</div>
+    <div class="md2">February 17, 2026 &bull; 6:30 PM</div>
+    <div class="bdgs"><span class="bdg b-comp">&#10003; Minutes Available</span></div>
+  </div>
+  <div class="mcb">
+    <div class="pills"><span class="pl pp">Personnel</span><span class="pl pc">Curriculum</span><span class="pl pf">Finance</span><span class="pl pco">Community</span></div>
+    <ul class="acts">
+<li class="hl">Board approved new Principal and Student Services Coordinator appointments</li>
+<li class="hl">D112 educators honored with prestigious award &mdash; recognized February 11, 2026</li>
+<li>Dual Language Transition Task Force progress report presented</li>
+<li>Monthly financials and February bills approved</li>
+<li>2026&ndash;27 enrollment projections and registration update presented</li>
+    </ul>
+    <div class="mbars"><div class="mbar"><div class="mbl">Personnel</div><div class="mbt"><div class="mbf" style="width:90%;background:#e65100;"></div></div></div><div class="mbar"><div class="mbl">Curriculum</div><div class="mbt"><div class="mbf" style="width:65%;background:#1565c0;"></div></div></div><div class="mbar"><div class="mbl">Community</div><div class="mbt"><div class="mbf" style="width:65%;background:#c9a227;"></div></div></div></div>
+  </div>
+  <div class="mcf"><button class="bs bt2" onclick="toggleDetail('dd7')">&#9660; Details</button><a class="bs bo2" href="https://www.nssd112.org/board-of-education/board-of-education-meeting-information" target="_blank">&#128203; Agenda</a><button class="bs bgr2" onclick="openModal(7)">&#128221; Notes</button></div>
+  <div class="mdet" id="dd7"><h4>Personnel Approvals</h4><ul><li>New building principal appointment approved</li><li>Student Services Coordinator position filled</li><li>Both effective for remainder of 2025&ndash;26</li></ul><h4>Dual Language Task Force Update</h4><ul><li>Community input sessions completed at Red Oak and Oak Terrace</li><li>Transition support plan in development</li><li>Parent communication timeline shared with the Board</li></ul></div>
+</div>
+
+<div class="mc" id="c8" data-cats="curriculum personnel facilities finance policy">
+  <div class="mch" style="border-top:4px solid #5d4037;">
+    <div class="mm">March 2026</div>
+    <div class="md2">March 16, 2026 &bull; Rescheduled from Original Date</div>
+    <div class="bdgs"><span class="bdg b-pend">&#9203; Minutes Pending</span><span class="bdg b-move">&#128204; Rescheduled</span></div>
+  </div>
+  <div class="mcb">
+    <div class="pills"><span class="pl pc">Curriculum</span><span class="pl pp">Personnel</span><span class="pl pfa">Facilities</span><span class="pl pf">Finance</span><span class="pl po">Policy</span></div>
+    <ul class="acts">
+<li>Meeting rescheduled to March 16 &mdash; see nssd112.org for agenda details</li>
+<li class="hl">New administrator appointments for 2025&ndash;26 announced (effective March 19)</li>
+<li>Sherwood Elementary Phase 2 facilities update presented</li>
+<li>Q3 financial report and budget amendments reviewed</li>
+<li>READ Act literacy compliance screening data reviewed</li>
+<li>Policy Committee recommendations considered by the Board</li>
+    </ul>
+    <div class="mbars"><div class="mbar"><div class="mbl">Curriculum</div><div class="mbt"><div class="mbf" style="width:72%;background:#1565c0;"></div></div></div><div class="mbar"><div class="mbl">Personnel</div><div class="mbt"><div class="mbf" style="width:65%;background:#e65100;"></div></div></div><div class="mbar"><div class="mbl">Facilities</div><div class="mbt"><div class="mbf" style="width:70%;background:#6a1b9a;"></div></div></div></div>
+  </div>
+  <div class="mcf"><a class="bs bo2" href="https://www.nssd112.org/board-of-education/board-of-education-meeting-information" target="_blank">&#128203; Agenda</a><button class="bs bgr2" onclick="openModal(8)">&#128221; Notes</button></div>
+  <div class="mdet" id="dd8"></div>
+</div>
+
+<div class="mc" id="c9" data-cats="personnel facilities curriculum finance community">
+  <div class="mch" style="border-top:4px solid #c9a227;">
+    <div class="mm">April 2026</div>
+    <div class="md2">April 21, 2026 &bull; Most Recent Meeting</div>
+    <div class="bdgs"><span class="bdg b-comp">&#10003; Minutes Available</span><span class="bdg b-new">&#11088; Most Recent</span></div>
+  </div>
+  <div class="mcb">
+    <div class="pills"><span class="pl pp">Personnel</span><span class="pl pfa">Facilities</span><span class="pl pc">Curriculum</span><span class="pl pf">Finance</span><span class="pl pco">Community</span></div>
+    <ul class="acts">
+<li class="hl">Four administrative appointments approved for 2026&ndash;27: Jeremy Wickham (Asst. Supt. Finance &amp; Ops), Andy Kramer (Ravinia Principal), Angela Andrews (Edgewood Assoc. Principal), Timothy La Brie (Indian Trail Assoc. Principal)</li>
+<li class="hl">Edgewood 8th grader Luc Sever named Illinois State AI Challenge Champion</li>
+<li class="hl">Wayne Thomas Elementary renovation bids approved &mdash; final Phase 2 project, construction Fall 2026</li>
+<li>Oak Terrace universally-designed playground approved based on student input</li>
+<li>New Social Studies curriculum resources adopted after yearlong review</li>
+<li>Student Representatives initiative announced &mdash; 7th graders invited to serve on the Board</li>
+    </ul>
+    <div class="mbars"><div class="mbar"><div class="mbl">Personnel</div><div class="mbt"><div class="mbf" style="width:90%;background:#e65100;"></div></div></div><div class="mbar"><div class="mbl">Facilities</div><div class="mbt"><div class="mbf" style="width:85%;background:#6a1b9a;"></div></div></div><div class="mbar"><div class="mbl">Curriculum</div><div class="mbt"><div class="mbf" style="width:80%;background:#1565c0;"></div></div></div></div>
+  </div>
+  <div class="mcf"><button class="bs bt2" onclick="toggleDetail('dd9')">&#9660; Details</button><a class="bs bo2" href="https://www.nssd112.org/board-of-education/board-of-education-meeting-information" target="_blank">&#128203; Agenda</a><a class="bs bg2" href="https://vimeo.com/user133899354" target="_blank">&#127909; Watch</a></div>
+  <div class="mdet" id="dd9"><h4>2026&ndash;27 Appointments (Effective July 1, 2026)</h4><ul><li><strong>Jeremy Wickham</strong> &mdash; Asst. Superintendent for Finance &amp; Operations</li><li><strong>Andy Kramer</strong> &mdash; Principal, Ravinia Elementary</li><li><strong>Angela Andrews</strong> &mdash; Associate Principal, Edgewood Middle School</li><li><strong>Timothy La Brie</strong> &mdash; Associate Principal, Indian Trail Elementary</li></ul><h4>AI State Champion &mdash; Luc Sever, Edgewood Grade 8</h4><ul><li>Won Track 2 of Presidential AI Challenge with a Personalized News chatbot</li><li>Recognized before the full Board at the April 21 meeting</li></ul><h4>Wayne Thomas &mdash; Final Phase 2 Project</h4><ul><li>Bids accepted from Gilbane Building Company</li><li>Construction starts Fall 2026 &mdash; last school under Phase 2</li></ul><h4>Student Representatives Initiative</h4><ul><li>Announced by Deputy Superintendent Dr. Schroeder</li><li>Current 7th graders apply to serve on the Board during 8th grade year</li></ul></div>
+</div>
+
+<div class="mc" id="c10" data-cats="finance curriculum personnel">
+  <div class="mch" style="border-top:4px solid #c9a227;">
+    <div class="mm">May 2026</div>
+    <div class="md2">May 19, 2026 &bull; 6:30 PM &bull; Northwood MS Auditorium</div>
+    <div class="bdgs"><span class="bdg b-upco">&#128197; Upcoming &mdash; May 19, 2026</span></div>
+  </div>
+  <div class="mcb">
+    <div class="pills"><span class="pl pf">Finance</span><span class="pl pc">Curriculum</span><span class="pl pp">Personnel</span></div>
+    <ul class="acts">
+<li>Expected: Year-end financial review and 2026&ndash;27 budget planning</li>
+<li>Expected: 2027&ndash;28 school calendar first reading (draft presented April 21)</li>
+<li>Expected: Personnel year-end recommendations and approvals</li>
+<li>Agenda posted 48 hours before at nssd112.org and BoardBook</li>
+<li>Public comment: Sign up in-person at Northwood MS before the meeting</li>
+    </ul>
+    
+  </div>
+  <div class="mcf"><a class="bs bo2" href="https://www.nssd112.org/board-of-education/board-of-education-meeting-information" target="_blank">&#128203; View Agenda</a><a class="bs bg2" href="https://vimeo.com/user133899354" target="_blank">&#127909; Livestream</a><button class="bs bgr2" onclick="openModal(10)">&#128221; Notes</button></div>
+  <div class="mdet" id="dd10"></div>
+</div>
+
+<div class="mc" id="c11" data-cats="finance personnel community">
+  <div class="mch" style="border-top:4px solid #1e3a5f;">
+    <div class="mm">June 2026 &mdash; Year-End Meeting</div>
+    <div class="md2">June 2026 &bull; Final Meeting of 2025&ndash;26</div>
+    <div class="bdgs"><span class="bdg b-upco">&#128197; Upcoming &mdash; Final 2025&ndash;26</span></div>
+  </div>
+  <div class="mcb">
+    <div class="pills"><span class="pl pf">Finance</span><span class="pl pp">Personnel</span><span class="pl pco">Community</span></div>
+    <ul class="acts">
+<li>Expected: End-of-year financial close and external audit preparation</li>
+<li class="hl">Expected: Dr. Michael Lubelfeld retirement recognition &mdash; retiring June 30, 2026</li>
+<li class="hl">Expected: Dr. Monica Schroeder formally welcomed as incoming Superintendent</li>
+<li>Expected: Year-end student, staff, and Board recognition</li>
+<li>Expected: Preview of 2026&ndash;27 strategic priorities</li>
+    </ul>
+    
+  </div>
+  <div class="mcf"><a class="bs bo2" href="https://www.nssd112.org/board-of-education/board-of-education-meeting-information" target="_blank">&#128203; View Agenda</a><button class="bs bgr2" onclick="openModal(11)">&#128221; Notes</button></div>
+  <div class="mdet" id="dd11"></div>
+</div>
+
+</div><!-- end cgrid -->
+<div class="empty" id="empty-state">No meetings match the current search and category filter.</div>
+
+<div class="mov" id="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+  <div class="mbox" tabindex="-1">
+    <h3 id="modal-title">&#128221; Meeting Notes</h3>
+    <p>Paste agenda text or minutes below. Use "Parse &amp; Categorize" to auto-detect topics, or save your own notes.</p>
+    <textarea id="modal-text" placeholder="Paste agenda, minutes, or your own notes here..."></textarea>
+    <div class="presult" id="presult"></div>
+    <div class="macts">
+      <button class="bs bt2" onclick="parseMinutes()">&#128202; Parse &amp; Categorize</button>
+      <button class="bs bg2" onclick="saveModal()">&#128190; Save Notes</button>
+      <button class="bs bgr2" onclick="closeModal()">&#10005; Close</button>
+    </div>
+  </div>
+</div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+</div><!-- end main -->
+
+<footer class="bpfooter">
+  <div class="d112logo-sm">D112</div>
+  <strong>North Shore School District 112</strong><br/>
+  445 Sheridan Rd, Highwood, IL 60040 &bull; 224-765-3001 &bull;
+  <a href="https://www.nssd112.org" target="_blank">nssd112.org</a><br/>
+  Superintendent (2025&ndash;26): Dr. Michael Lubelfeld &mdash; Retiring June 30, 2026 &bull;
+  Incoming: <a href="https://www.nssd112.org" target="_blank">Dr. Monica Schroeder</a>, July 1, 2026<br/>
+  Board Contact: <a href="mailto:aschulman@nssd112.org">Audrey Schulman &mdash; aschulman@nssd112.org</a><br/>
+  Meetings: Northwood MS Auditorium, 945 N. Ave, Highland Park, IL &bull;
+  <a href="https://vimeo.com/user133899354" target="_blank">Vimeo Livestream</a> &bull;
+  <a href="https://meetings.boardbook.org/Public/Organization/2398" target="_blank">BoardBook</a>
+</footer>
+
+<script>
+var currentModal=-1,notes={},activeCat='all';
+var notesKey='nssd112-board-dashboard-notes-v1';
+var months=['July 2025','August 2025','September 2025','October 2025','November 2025',
+  'December 2025','January 2026','February 2026','March 2026','April 2026','May 2026','June 2026'];
+try{notes=JSON.parse(localStorage.getItem(notesKey)||'{}')||{};}catch(e){notes={};}
+function toggleSidebar(){
+  document.getElementById('sidebar').classList.toggle('open');
+  document.getElementById('sb-overlay').classList.toggle('open');
+}
+function closeSidebar(){
+  document.getElementById('sidebar').classList.remove('open');
+  document.getElementById('sb-overlay').classList.remove('open');
+}
+function filterCat(cat){
+  activeCat=cat;
+  document.querySelectorAll('.ct,.sb-b').forEach(function(b){b.classList.remove('active');});
+  document.querySelectorAll('.ct,.sb-b').forEach(function(b){
+    var t=b.textContent.trim().toLowerCase();
+    if(cat==='all'&&(t==='all'||t==='all meetings'))b.classList.add('active');
+    else if(cat!=='all'&&t.startsWith(cat))b.classList.add('active');
+  });
+  applyFilters();
+  if(window.innerWidth<=768)closeSidebar();
+}
+function doSearch(){
+  applyFilters();
+}
+function applyFilters(){
+  var q=document.getElementById('searchInput').value.trim().toLowerCase();
+  var visible=0;
+  document.querySelectorAll('.mc').forEach(function(c){
+    var cats=c.getAttribute('data-cats')||'';
+    var matchesCat=activeCat==='all'||cats.indexOf(activeCat)!==-1;
+    var matchesSearch=!q||c.textContent.toLowerCase().indexOf(q)!==-1;
+    var hidden=!(matchesCat&&matchesSearch);
+    c.setAttribute('data-hidden',hidden?'true':'false');
+    if(!hidden)visible++;
+  });
+  document.getElementById('empty-state').classList.toggle('show',visible===0);
+}
+function toggleDetail(id){var el=document.getElementById(id);if(el)el.classList.toggle('open');}
+function openModal(i){
+  currentModal=i;
+  document.getElementById('modal-title').textContent=(i>=0&&months[i])?'Notes — '+months[i]:'Meeting Notes';
+  document.getElementById('modal-text').value=notes[i]||'';
+  document.getElementById('presult').style.display='none';
+  document.getElementById('modal').classList.add('open');
+  document.querySelector('.mbox').focus();
+}
+function closeModal(){document.getElementById('modal').classList.remove('open');}
+function parseMinutes(){
+  var txt=document.getElementById('modal-text').value.toLowerCase();
+  var cats={
+    'Finance':['budget','levy','bills','financial','fund','tax','revenue','expenditure','fiscal','audit'],
+    'Curriculum':['curriculum','assessment','instruction','reading','mtss','isbe','course','literacy','learning'],
+    'Personnel':['hire','staff','approve','leave','retire','resignation','principal','superintendent','appointment','administrator'],
+    'Facilities':['building','renovation','construction','maintenance','capital','facility','phase'],
+    'Policy':['policy','handbook','adopt','review','resolution','compliance','procedure'],
+    'Community':['community','parent','event','recognition','celebration','family','engagement','bpac','award']
+  };
+  var res=[];
+  for(var cat in cats){
+    var count=0;
+    cats[cat].forEach(function(kw){var m=txt.match(new RegExp(kw,'g'));if(m)count+=m.length;});
+    if(count>0)res.push('<strong>'+cat+':</strong> '+count+' reference'+(count>1?'s':'')+' found');
+  }
+  var pr=document.getElementById('presult');
+  pr.style.display='block';
+  pr.innerHTML=res.length>0?'<strong>Detected Topics:</strong><br/>'+res.join('<br/>'):'No specific topics detected. Try pasting agenda or minutes text.';
+}
+function saveModal(){
+  notes[currentModal]=document.getElementById('modal-text').value;
+  try{localStorage.setItem(notesKey,JSON.stringify(notes));}catch(e){}
+  closeModal();
+  showToast('Notes saved for '+(months[currentModal]||'this meeting'));
+}
+function showToast(msg){
+  var t=document.getElementById('toast');
+  t.textContent=msg;t.classList.add('show');
+  setTimeout(function(){t.classList.remove('show');},3000);
+}
+function scrollToCard(id){
+  var el=document.getElementById(id);
+  if(el){
+    document.getElementById('searchInput').value='';
+    filterCat('all');
+    el.setAttribute('data-hidden','false');
+    el.scrollIntoView({behavior:'smooth',block:'center'});
+  }
+}
+document.getElementById('modal').addEventListener('click',function(e){if(e.target===this)closeModal();});
+document.addEventListener('keydown',function(e){
+  if(e.key==='Escape'){closeModal();closeSidebar();}
+  if((e.key==='Enter'||e.key===' ')&&e.target.classList.contains('tld')){
+    e.preventDefault();
+    e.target.click();
+  }
+});
+document.querySelectorAll('.tld').forEach(function(dot){
+  dot.setAttribute('tabindex','0');
+  dot.setAttribute('role','button');
+  dot.setAttribute('aria-label',dot.getAttribute('title')||'Open meeting');
+});
+document.querySelectorAll('a[target="_blank"]').forEach(function(link){
+  link.setAttribute('rel','noopener noreferrer');
+});
+applyFilters();
+</script>
+</body>
+</html>
