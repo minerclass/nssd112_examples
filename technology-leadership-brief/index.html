@@ -146,9 +146,6 @@ h1{font-size:2.05rem;margin:0;color:var(--ink)}
 .proof .pn{font-family:Lora,serif;font-size:1.25rem;font-weight:700;color:var(--brick);line-height:1.1}
 .proof .pt{font-weight:700;font-size:.88rem}
 .proof .pc{color:var(--muted);font-size:.78rem;margin-top:4px;font-style:italic}
-.print-actions{display:flex;gap:10px;flex-wrap:wrap;margin:0 0 22px}
-.print-actions button{border:1px solid var(--ink);background:var(--ink);color:var(--paper);border-radius:4px;padding:9px 13px;font-weight:700;cursor:pointer}
-.print-actions button.secondary{background:transparent;color:var(--ink)}
 .footer{text-align:center;border-top:1px solid var(--line);padding:24px 34px;color:var(--muted);font-family:Lora,serif;font-style:italic;font-size:.82rem}
 @media(max-width:760px){
   .masthead{position:static;padding:16px 18px}
@@ -164,7 +161,7 @@ h1{font-size:2.05rem;margin:0;color:var(--ink)}
 }
 @media print{
   body{background:white;color:#111;font-size:11px}
-  .masthead,.toolbar,.footer,.print-actions{display:none!important}
+  .masthead,.toolbar,.footer{display:none!important}
   main{max-width:none;padding:0}
   .section{display:block!important;page-break-after:always}
   .section:last-child{page-break-after:auto}
@@ -196,8 +193,8 @@ h1{font-size:2.05rem;margin:0;color:var(--ink)}
   <button data-tab="migration"><span class="num">IV</span>Migration</button>
   <button data-tab="ai"><span class="num">V</span>AI</button>
   <button data-tab="parallels"><span class="num">VI</span>Parallel Practice</button>
-  <button data-tab="questions"><span class="num">VII</span>Questions</button>
-  <button data-tab="print"><span class="num">VIII</span>Print Brief</button>
+  <button data-tab="signals"><span class="num">VII</span>Public Signals</button>
+  <button data-tab="questions"><span class="num">VIII</span>Questions</button>
 </nav>
 
 <main>
@@ -337,6 +334,34 @@ h1{font-size:2.05rem;margin:0;color:var(--ink)}
   <div class="script">"What stands out to me is that NSSD112's public work is recognizably connected to the privacy, AI, infrastructure, and instructional technology work I have been leading. That gives me a useful starting point, while still requiring humility, listening, and careful attention to the district's specific context."</div>
 </section>
 
+<section class="section" id="signals">
+  <div class="sh">
+    <div class="eyebrow">Public communication signals</div>
+    <h1>LinkedIn Feed Takeaways</h1>
+    <div class="sub">Interview-useful patterns from NSSD112's public LinkedIn posts and district-facing communication style.</div>
+  </div>
+  <p class="lead">The public feed reinforces a district identity built around literacy, family connection, multilingual inclusion, staff recognition, student agency, and community partnership. These are not side themes. They are the public language the district uses to explain itself.</p>
+
+  <div class="grid grid-3">
+    <div class="card"><h3>Literacy Is Public Identity</h3><p>Repeated posts use #112reads and describe ELA modules, anchor texts, essential questions, and at-home prompts. Technology can support this by making learning evidence, family communication, and instructional resources easier to access.</p></div>
+    <div class="card"><h3>Family Partnership Is Routine</h3><p>The posts often invite parents to ask children specific questions about what they are reading or learning. This points to a useful technology lane: parent portals, translation, communication cadence, and home-school visibility.</p></div>
+    <div class="card"><h3>Multilingual Learners Are Visible</h3><p>BPAC and multilingual learner celebrations appear in the district's public story. For the technology role, this connects directly to translation workflows, Dual Language support, family access, and equity in digital systems.</p></div>
+    <div class="card"><h3>Support Staff Are Valued</h3><p>The district publicly recognizes associate principals, paraprofessionals, bus drivers, administrative professionals, and other staff groups. Strong technology leadership should improve daily work for every adult who supports students, not only teachers.</p></div>
+    <div class="card"><h3>AI Is About Student Agency</h3><p>The Edgewood Presidential AI Challenge recognition frames AI as student creation and problem-solving, not just adult policy compliance. This is a strong bridge to responsible AI, student voice, privacy, and academic integrity.</p></div>
+    <div class="card"><h3>Community Partnerships Matter</h3><p>Posts about the 112 Education Foundation, Northwestern Griffin's Tale, Art in Bloom, BPAC, and downtown Highland Park show a district that sees learning as community-embedded.</p></div>
+  </div>
+
+  <h2 class="band-title">Interview Language</h2>
+  <div class="script">"Looking at how NSSD112 communicates publicly, I noticed that literacy, multilingual family engagement, student creativity, and staff recognition are not side themes. They are part of the district's public operating culture. For technology leadership, that means the work is not only network reliability or tool selection. It is making learning visible, protecting student data, supporting multilingual access, and helping staff spend more time with students and less time wrestling systems."</div>
+
+  <h2 class="band-title">Questions This Opens</h2>
+  <div class="grid grid-3">
+    <div class="card"><h3>Literacy and Families</h3><p>How does the district want technology to strengthen the family-facing side of literacy work?</p></div>
+    <div class="card"><h3>Multilingual Access</h3><p>Where do multilingual families currently experience the most friction with district systems or communication tools?</p></div>
+    <div class="card"><h3>Student AI Work</h3><p>How do you want the Director of Technology and Innovation to support student-created AI work while keeping privacy and academic integrity clear?</p></div>
+  </div>
+</section>
+
 <section class="section" id="questions">
   <div class="sh">
     <div class="eyebrow">Rehearsal</div>
@@ -361,23 +386,6 @@ h1{font-size:2.05rem;margin:0;color:var(--ink)}
   </article>
 </section>
 
-<section class="section" id="print">
-  <div class="sh">
-    <div class="eyebrow">Exportable brief</div>
-    <h1>Two-Page Print Brief</h1>
-    <div class="sub">A compact version designed for printing or saving as PDF from the browser.</div>
-  </div>
-  <div class="print-actions">
-    <button type="button" onclick="window.print()">Print or Save as PDF</button>
-    <button class="secondary" type="button" data-tab-jump="brief">Return to Full Brief</button>
-  </div>
-  <div class="grid grid-2">
-    <div class="card"><h3>Core Read</h3><p>NSSD112 appears to need a technology leader who can join instruction, privacy, cybersecurity, AI governance, and operational migration into a coherent district strategy.</p></div>
-    <div class="card"><h3>Best Posture</h3><p>Name professional overlap naturally, then pivot to the work: privacy, AI governance, infrastructure, data systems, and instructional technology leadership.</p></div>
-    <div class="card"><h3>Three Proof Points</h3><p>TLE Mini Seal leadership work, cybersecurity and infrastructure modernization, and AI-in-education scholarship plus professional learning experience.</p></div>
-    <div class="card"><h3>Three Questions to Ask</h3><p>Year-one success, Teaching and Learning partnership, and the most urgent pre-start technology decisions.</p></div>
-  </div>
-</section>
 </main>
 
 <footer class="footer">Standalone local interview preparation and reference brief. Keep facts verified against official district and state sources before sharing externally.</footer>
@@ -399,9 +407,6 @@ document.querySelectorAll('.acc-head').forEach(button=>{
 });
 document.querySelectorAll('.q-head').forEach(button=>{
   button.addEventListener('click',()=>button.closest('.question').classList.toggle('open'));
-});
-document.querySelectorAll('[data-tab-jump]').forEach(button=>{
-  button.addEventListener('click',()=>showTab(button.dataset.tabJump));
 });
 document.addEventListener('keydown',event=>{
   if(['INPUT','TEXTAREA','SELECT'].includes(event.target.tagName))return;
