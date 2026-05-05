@@ -2,9 +2,15 @@
 
 This folder contains a standalone, browser-based dashboard for North Shore School District 112 Board of Education meeting information for the 2025-26 school year.
 
+## Published Pages
+
+- [Board Meeting Dashboard](https://minerclass.github.io/nssd112_examples/)
+- [Technology Leadership Brief](https://minerclass.github.io/nssd112_examples/technology-leadership-brief/)
+
 ## Contents
 
 - `index.html` - the complete dashboard, including meeting timeline, category filters, search, meeting cards, public links, and local notes.
+- `technology-leadership-brief/index.html` - the published technology leadership brief companion page.
 
 ## How to Preview
 
